@@ -47,19 +47,8 @@ target_meta = geo_dict
 #print(target_meta)
 
 
-with open('target_scaler.pkl', 'rb') as f:
+with open('target_scaler_height.pkl', 'rb') as f:
 	target_scaler = pickle.load(f)
-#predictors = glob('C:\\Users\\willi\\Desktop\\DEM data\\n07_e004_1arc_v3.tif')
-#stack_obj = Raster(predictors)
-#print(stack_obj)
-
-#attributes = dir(stack_obj)
-
-# Filter out only the methods
-#methods = [attr for attr in attributes if hasattr(getattr(stack_obj, attr), '__call__')]
-
-# Print the methods
-#print(methods)
 st.title("Generative AI For Synthetic Height Bands (Courtesy of Ryzen AI-powered PCs)")
 
 uploaded_files = st.file_uploader("Upload Sentinel 2 bands (B02, B03, B04, B08)", type="tif", accept_multiple_files=True)
