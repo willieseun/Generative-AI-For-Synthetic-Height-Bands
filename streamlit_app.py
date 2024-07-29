@@ -14,7 +14,7 @@ import streamlit as st
 from pyspatialml import Raster
 from pyspatialml.datasets import nc
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-from gen_cnn import CNN, resume
+from gen_cnn_dem import CNN, resume
 
 batch_size = 16
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
