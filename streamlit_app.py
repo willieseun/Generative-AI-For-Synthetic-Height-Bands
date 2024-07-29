@@ -49,40 +49,6 @@ target_meta = geo_dict
 
 with open('target_scaler.pkl', 'rb') as f:
 	target_scaler = pickle.load(f)
-# Desired resolution (x_res, y_res)
-desired_resolution = (1, 1)
-def resample(tif_file):
-	with rasterio.open(tif_file) as src:
-		# Get the original shape (rows, cols)
-		original_shape = src.shape  # (rows, cols)
-		
-		# Get the original resolution (pixel size)
-		original_resolution = src.res  # (x_res, y_res)
-		
-		# Calculate the scale factor for each dimension
-		scale_factor_x = original_resolution[0] / desired_resolution[0]
-		scale_factor_y = original_resolution[1] / desired_resolution[1]
-		print(scale_factor_x)
-		print(scale_factor_y)
-		
-		# Apply the scale factor to the original dimensions
-		new_width = int(original_shape[1] * scale_factor_x)
-		new_height = int(original_shape[0] * scale_factor_y)
-		
-		# The new shape in (rows, cols)
-		out_shape = (new_height, new_width)
-
-	stack = Raster(tif_file)
-	print(stack.res)
-	stack = stack.aggregate(out_shape, resampling="bilinear", dtype=np.float32, compress=None)
-	single_layer = stack.iloc[0]
-	filename = os.path.basename(tif_file)
-	#stack.write('Resampled_' + filename)
-	#stack.write('tirs_nt.tif')
-	print(stack.res)
-	return single_layer
-
-
 #predictors = glob('C:\\Users\\willi\\Desktop\\DEM data\\n07_e004_1arc_v3.tif')
 #stack_obj = Raster(predictors)
 #print(stack_obj)
@@ -94,9 +60,9 @@ def resample(tif_file):
 
 # Print the methods
 #print(methods)
-st.title("Generative AI For Improving Open Source Satellite Image Resolution (Courtesy of Ryzen AI-powered PCs)")
+st.title("Generative AI For Synthetic Height Bands (Courtesy of Ryzen AI-powered PCs)")
 
-uploaded_files = st.file_uploader("Upload Sentinel 2 bands (B02, B03, B04, B05, B06, B07, B08, B8A, B11, B12)", type="tif", accept_multiple_files=True)
+uploaded_files = st.file_uploader("Upload Sentinel 2 bands (B02, B03, B04, B08)", type="tif", accept_multiple_files=True)
 temp_file_path_lst = []
 if uploaded_files:
 	for uploaded_file in uploaded_files:
@@ -107,38 +73,27 @@ if uploaded_files:
 		temp_file_path_lst.append(temp_file_path)
 
 		st.success(f"File {uploaded_file.name} uploaded successfully!\nWait for processing")
-	temp_file_path_lst = [resample(temp) for temp in temp_file_path_lst]
 	stack_obj = Raster(temp_file_path_lst)
-	stack_obj.write("resampled.tif")
-	print(stack_obj.names)
-	#try:
-	new_raster_file_path = 'New_raster.tif'
-	result = stack_obj.torch_regression_dpl_output_scaler(estimator=model, shape=(2,5), scaler=target_scaler, target_meta=None, no_data=np.inf, dtype='float32', progress=True)
-	result.write(new_raster_file_path)
+	try:
+		new_raster_file_path = 'New_raster.tif'
+		result = stack_obj.torch_regression_dpl_output_scaler(estimator=model, shape=(2,5), scaler=target_scaler, target_meta=None, no_data=np.inf, dtype='float32', progress=True)
+		result.write(new_raster_file_path)
 
-	# importing library
-	 
-	#img = Image(new_raster_file_path)
-	 
-	# sharpening image
-	#img.sharpen(2)
-	#img.write(new_raster_file_path)
-
-	# Provide download link for the processed file
-	with open(new_raster_file_path, "rb") as file:
-		st.download_button(
-			label=f"Download Upscaled Raster",
-			data=file,
-			file_name=f"Processed_{uploaded_file.name}",
-			mime="image/tiff"
-		)
+		# Provide download link for the processed file
+		with open(new_raster_file_path, "rb") as file:
+			st.download_button(
+				label=f"Download Upscaled Raster",
+				data=file,
+				file_name=f"Processed_{uploaded_file.name}",
+				mime="image/tiff"
+			)
 	#if os.path.isfile(new_raster_file_path):
 		#os.remove(new_raster_file_path)
 		#print(f"File {new_raster_file_path} has been deleted.")
 	#else:
 	#	print(f"The file {new_raster_file_path} does not exist.")
-	#except:
-	#st.error("Error: Please upload the specified bands above and try again")
+	except:
+		st.error("Error: Please upload the specified bands above and try again")
 
 	# Clean up the temporary files
 	#os.remove(temp_file_path)
