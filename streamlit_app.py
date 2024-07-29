@@ -63,26 +63,26 @@ if uploaded_files:
 
 		st.success(f"File {uploaded_file.name} uploaded successfully!\nWait for processing")
 	stack_obj = Raster(temp_file_path_lst)
-	try:
-		new_raster_file_path = 'New_raster.tif'
-		result = stack_obj.torch_regression_dpl_output_scaler(estimator=model, shape=(2,5), scaler=target_scaler, target_meta=None, no_data=np.inf, dtype='float32', progress=True)
-		result.write(new_raster_file_path)
+	#try:
+	new_raster_file_path = 'New_raster.tif'
+	result = stack_obj.torch_regression_dpl_output_scaler(estimator=model, shape=(2,5), scaler=target_scaler, target_meta=None, no_data=np.inf, dtype='float32', progress=True)
+	result.write(new_raster_file_path)
 
-		# Provide download link for the processed file
-		with open(new_raster_file_path, "rb") as file:
-			st.download_button(
-				label=f"Download Upscaled Raster",
-				data=file,
-				file_name=f"Processed_{uploaded_file.name}",
-				mime="image/tiff"
-			)
+	# Provide download link for the processed file
+	with open(new_raster_file_path, "rb") as file:
+		st.download_button(
+			label=f"Download Upscaled Raster",
+			data=file,
+			file_name=f"Processed_{uploaded_file.name}",
+			mime="image/tiff"
+		)
 	#if os.path.isfile(new_raster_file_path):
 		#os.remove(new_raster_file_path)
 		#print(f"File {new_raster_file_path} has been deleted.")
 	#else:
 	#	print(f"The file {new_raster_file_path} does not exist.")
-	except:
-		st.error("Error: Please upload the specified bands above and try again")
+	#except:
+	#	st.error("Error: Please upload the specified bands above and try again")
 
 	# Clean up the temporary files
 	#os.remove(temp_file_path)
