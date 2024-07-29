@@ -65,7 +65,7 @@ if uploaded_files:
 	stack_obj = Raster(temp_file_path_lst)
 	#try:
 	new_raster_file_path = 'New_raster.tif'
-	result = stack_obj.torch_regression_dpl_output_scaler(estimator=model, shape=(2,5), scaler=target_scaler, target_meta=None, no_data=np.inf, dtype='float32', progress=True)
+	result = stack_obj.torch_regression_dpl_output_scaler(estimator=model, shape=(2,2), scaler=target_scaler, target_meta=None, no_data=np.inf, dtype='float32', progress=True)
 	result.write(new_raster_file_path)
 
 	# Provide download link for the processed file
