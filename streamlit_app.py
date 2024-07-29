@@ -71,7 +71,7 @@ if uploaded_files:
 	# Provide download link for the processed file
 	with open(new_raster_file_path, "rb") as file:
 		st.download_button(
-			label=f"Download Upscaled Raster",
+			label=f"Download Synthetic Height Raster",
 			data=file,
 			file_name=f"Processed_{uploaded_file.name}",
 			mime="image/tiff"
