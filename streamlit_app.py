@@ -22,7 +22,7 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(torch.backends.cudnn.version())
 model = CNN()
 model.to(device)
-resume(model, "gen_cnn_trial.pth")
+resume(model, "gen_cnn_height.pth")
 geo_dict = {
 	'driver': 'GTiff',
 	'dtype': 'float32',
