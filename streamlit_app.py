@@ -51,7 +51,7 @@ with open('target_scaler_height.pkl', 'rb') as f:
 	target_scaler = pickle.load(f)
 st.title("Generative AI For Synthetic Height Bands (Courtesy of Ryzen AI-powered PCs)")
 
-uploaded_files = st.file_uploader("Upload Sentinel 2 bands (B02, B03, B04, B08)", type="tif", accept_multiple_files=True)
+uploaded_files = st.file_uploader("Upload Satellite bands (Red, Green, Blue, NIR)", type="tif", accept_multiple_files=True)
 temp_file_path_lst = []
 if uploaded_files:
 	for uploaded_file in uploaded_files:
