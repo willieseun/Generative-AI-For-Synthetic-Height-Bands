@@ -22,7 +22,7 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(torch.backends.cudnn.version())
 model = CNN()
 model.to(device)
-resume(model, "gen_cnn_height.pth")
+resume(model, "gen_cnn_height_indices1.pth")
 geo_dict = {
 	'driver': 'GTiff',
 	'dtype': 'float32',
@@ -65,7 +65,20 @@ if uploaded_files:
 	stack_obj = Raster(temp_file_path_lst)
 	try:
 		new_raster_file_path = 'New_raster.tif'
-		result = stack_obj.torch_regression_dpl_output_scaler(estimator=model, shape=(2,2), scaler=target_scaler, target_meta=None, no_data=np.inf, dtype='float32', progress=True)
+		# NDVI (Normalized Difference Vegetation Index)
+		ndvi = (stack_obj.iloc[3] - stack_obj.iloc[0]) / (stack_obj.iloc[3] + stack_obj.iloc[0])
+		
+		# GNDVI (Green Normalized Difference Vegetation Index)
+		gndvi = (stack_obj.iloc[3] - stack_obj.iloc[1]) / (stack_obj.iloc[3] + stack_obj.iloc[1])
+		
+		# NRVI (Normalized Ratio Vegetation Index)
+		rvi = stack_obj.iloc[3] / stack_obj.iloc[0]
+		
+		# NDWI (Normalized Difference Water Index)
+		ndwi = (stack_obj.iloc[1] - stack_obj.iloc[3]) / (stack_obj.iloc[1] + stack_obj.iloc[3])
+		
+		stack = Raster([stack_obj, ctvi_layer, gndvi_layer, kndvi_layer, msavi_layer, msavi2_layer, ndvi_layer, ndwi_layer, nrvi_layer, savi_layer, ttvi_layer])
+		result = stack.torch_regression_dpl_output_scaler(estimator=model, shape=(2,4), scaler=target_scaler, target_meta=None, no_data=np.inf, dtype='float32', progress=True)
 		result.write(new_raster_file_path)
 	
 		# Provide download link for the processed file
