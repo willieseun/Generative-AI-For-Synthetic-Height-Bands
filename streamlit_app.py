@@ -95,7 +95,7 @@ if uploaded_files:
 		#else:
 		#	print(f"The file {new_raster_file_path} does not exist.")
 	except Exception as e:
-        	print(f"Error processing: {e}")
+		print(f"Error processing: {e}")
 		st.error("Error: Please upload the specified bands above and try again")
 
 	# Clean up the temporary files
