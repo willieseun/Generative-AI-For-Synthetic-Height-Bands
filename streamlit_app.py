@@ -77,7 +77,7 @@ if uploaded_files:
 		# NDWI (Normalized Difference Water Index)
 		ndwi = (stack_obj.iloc[1] - stack_obj.iloc[3]) / (stack_obj.iloc[1] + stack_obj.iloc[3])
 		
-		stack = Raster([stack_obj, ctvi_layer, gndvi_layer, kndvi_layer, msavi_layer, msavi2_layer, ndvi_layer, ndwi_layer, nrvi_layer, savi_layer, ttvi_layer])
+		stack = Raster([stack_obj, ndvi, gndvi, rvi, ndwi])
 		result = stack.torch_regression_dpl_output_scaler(estimator=model, shape=(2,4), scaler=target_scaler, target_meta=None, no_data=np.inf, dtype='float32', progress=True)
 		result.write(new_raster_file_path)
 	
